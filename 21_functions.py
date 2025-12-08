@@ -266,3 +266,72 @@ result = my_function12(**person_info)  #unpacking dictionary
 print(result)  #Alice is 30 years old and lives in New York.
 
 
+
+
+##python scope##
+
+def myFunc():
+    x = 10  # local scope
+    print("Inside function, x =", x)
+
+#local scope
+
+def myFunc2():
+    x = 5  # local scope
+    def innerFunc():
+        y = 10  # inner function scope
+        print("Inside inner function, y =", y)
+    innerFunc()
+    print("Inside outer function, x =", x)
+
+
+
+myFunc2()    
+
+##global scope##
+
+x=300
+
+def myFunc3():
+    x=200  # local scope
+    print("Inside function, x =", x)  # accesses global x
+myFunc3()
+print("Outside function, x =", x)  # accesses global x
+
+print("--------------")
+#global keyword
+
+x=300
+def myFunc4():
+    global x
+    x = 200  # modifies global x
+    print("Inside function, x =", x)
+
+
+myFunc4()
+
+print("Outside function, x =", x)  # accesses modified global x
+
+
+##nonlocal keyword##
+
+def myfunc1():
+  x = "Jane"
+  def myfunc2():
+    nonlocal x
+    x = "hello"
+  myfunc2()
+  return x
+
+print(myfunc1())
+
+
+##LEGB Rule
+'''
+Local - Inside the current function
+Enclosing - Inside enclosing functions (from inner to outer)
+Global - At the top level of the module
+Built-in - In Python's built-in namespace
+
+'''
+
