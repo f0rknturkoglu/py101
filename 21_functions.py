@@ -335,3 +335,226 @@ Built-in - In Python's built-in namespace
 
 '''
 
+#decorators
+
+"""
+
+1) Basit dekoratör (loglama)
+2) wraps ile doğru fonksiyon ismi vs. koruma
+3) Parametre alan dekoratör
+4) Class içi hazır dekoratörler: @property, @staticmethod, @classmethod
+
+"""
+
+import time
+from functools import wraps
+
+# ============================================================
+# 1) TEMEL FİKİR: FONKSİYON DÖNDÜREN FONKSİYON
+# ============================================================
+
+def kare_al(x):
+    return x * x
+
+def fonksiyon_donduren_fonksiyon():
+    def merhaba():
+        print("Selam, ben iç fonksiyonum.")
+    return merhaba  # merhaba fonksiyonunu DÖNDÜRÜYORUZ, çağırmıyoruz
+
+# Bu kısım dekoratör mantığının temeli:
+# Bir fonksiyonu başka bir fonksiyona argüman olarak verebiliyoruz
+# ve fonksiyon döndürebiliyoruz.
+
+
+# ============================================================
+# 2) EN BASİT DEKORATÖR: LOGGING
+# ============================================================
+
+def log_calls(func):
+    """
+    Basit dekoratör:
+    Her fonksiyon çağrıldığında önce ve sonra mesaj yazdırır.
+    """
+    def wrapper(*args, **kwargs):
+        print(f"[log_calls] Çağrılıyor: {func.__name__} args={args}, kwargs={kwargs}")
+        result = func(*args, **kwargs)
+        print(f"[log_calls] Bitti: {func.__name__} -> sonuc={result}")
+        return result
+    return wrapper
+
+# @log_calls kullanmak = aşağıdaki gibi yazmak:
+# topla = log_calls(topla)
+
+@log_calls
+def topla(a, b):
+    """İki sayıyı toplar."""
+    return a + b
+
+@log_calls
+def selam_ver(isim):
+    print(f"Merhaba {isim}!")
+
+
+# ============================================================
+# 3) FUNCTOOLS.WRAPS KULLANMAK
+# ============================================================
+# Problem:
+# wrapper fonksiyonu, orijinal fonksiyonun __name__, __doc__ gibi
+# özelliklerini “örtüyor”. Bunu düzeltmek için @wraps kullanıyoruz.
+
+def log_calls_better(func):
+    @wraps(func)  # bu satır "func" metadata'sını wrapper'a kopyalar
+    def wrapper(*args, **kwargs):
+        print(f"[log_calls_better] Çağrılıyor: {func.__name__}")
+        result = func(*args, **kwargs)
+        print(f"[log_calls_better] Bitti: {func.__name__}")
+        return result
+    return wrapper
+
+@log_calls_better
+def carp(a, b):
+    """İki sayıyı çarpar."""
+    return a * b
+
+
+# ============================================================
+# 4) ZAMAN ÖLÇEN (TIMING) BİR DEKORATÖR
+# ============================================================
+
+def timing(func):
+    """
+    Fonksiyonun çalışma süresini ölçen dekoratör.
+    Profiling / performans ölçümü için faydalı.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"[timing] {func.__name__} {end - start:.6f} saniyede bitti.")
+        return result
+    return wrapper
+
+@timing
+def yavas_fonksiyon(n):
+    toplam = 0
+    for i in range(n):
+        toplam += i
+    return toplam
+
+
+# ============================================================
+# 5) PARAMETRE ALAN DEKORATÖR
+# ============================================================
+# Dikkat: Burada bir seviye daha fonksiyon var.
+#
+# log_level gibi bir parametre almak istiyoruz:
+# @log_level("DEBUG")
+#
+# Bunun için 3 katman oluşuyor:
+# 1) dış fonksiyon: dekoratörün parametrelerini alır
+# 2) gerçek dekoratör fonksiyonu: "func" alır
+# 3) wrapper: çağrıyı sarar
+
+def log_level(level):
+    """
+    Parametre alan dekoratör örneği.
+    Kullanım: @log_level("INFO") veya @log_level("DEBUG")
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            print(f"[{level}] {func.__name__} çağrılıyor...")
+            result = func(*args, **kwargs)
+            print(f"[{level}] {func.__name__} bitti.")
+            return result
+        return wrapper
+    return decorator
+
+@log_level("INFO")
+def selam(isim):
+    print(f"Selam {isim}!")
+
+
+# ============================================================
+# 6) CLASS İÇİ HAZIR DEKORATÖRLER
+#    @property, @staticmethod, @classmethod
+# ============================================================
+
+class Daire:
+    """
+    Daire sınıfı örneği:
+    - @property ile alan (area) gibi hesaplanmış özellik
+    - @staticmethod ile sınıftan bağımsız yardımcı fonksiyon
+    - @classmethod ile alternatif constructor
+    """
+    pi = 3.14159
+
+    def __init__(self, yaricap):
+        self.yaricap = yaricap
+
+    @property
+    def alan(self):
+        """
+        @property sayesinde:
+          d = Daire(10)
+          d.alan  # fonksiyon gibi çağırmadan, attribute gibi kullanıyoruz
+        """
+        return self.pi * (self.yaricap ** 2)
+
+    @staticmethod
+    def cm_to_m(cm):
+        """
+        @staticmethod:
+        Sınıfa ait ama self / cls kullanmayan yardımcı fonksiyon.
+        """
+        return cm / 100
+
+    @classmethod
+    def from_cap(cls, cap):
+        """
+        @classmethod ile alternatif constructor:
+        Daire.from_cap(10) -> çapı 10 olan daire (yarıçap=5)
+        Burada 'cls', Daire sınıfının kendisi.
+        """
+        yaricap = cap / 2
+        return cls(yaricap)
+
+
+# ============================================================
+# 7) TEST / DEMO KISMI
+#    Bu dosyayı direkt çalıştırınca burası çalışacak.
+# ============================================================
+
+if __name__ == "__main__":
+    print("=== 1) Fonksiyon döndüren fonksiyon ===")
+    ic_fonksiyon = fonksiyon_donduren_fonksiyon()
+    ic_fonksiyon()  # "Selam, ben iç fonksiyonum."
+
+    print("\n=== 2) Basit dekoratör: @log_calls ===")
+    sonuc = topla(3, 5)
+    selam_ver("Furkan")
+
+    print("\n=== 3) wraps ile meta veri koruma ===")
+    print("carp.__name__:", carp.__name__)
+    print("carp.__doc__:", carp.__doc__)
+    carp(4, 6)
+
+    print("\n=== 4) timing dekoratörü ===")
+    yavas_fonksiyon(1_000_00)
+
+    print("\n=== 5) Parametre alan dekoratör: @log_level('INFO') ===")
+    selam("Dünya")
+
+    print("\n=== 6) Class içi dekoratörler ===")
+    d = Daire(10)
+    print("Yarıçap:", d.yaricap)
+    print("Alan (@property):", d.alan)
+
+    print("5 cm =", Daire.cm_to_m(5), "metre (staticmethod)")
+
+    d2 = Daire.from_cap(20)
+    print("Çapı 20 olan dairenin yarıçapı (classmethod):", d2.yaricap)
+    print("Alanı:", d2.alan)
+
+    print("\nBitti. Şimdi kodu kurcalayıp değiştirmeye başla :)")
