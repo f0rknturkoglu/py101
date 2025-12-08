@@ -77,3 +77,192 @@ def my_function3(animal, name, age):
 
 my_function3("dog", name = "Buddy", age = 5)
 
+#passing different data types
+
+
+
+def my_function4(fruits):
+    for fruit in fruits:
+        print(fruit)
+
+fruits_list = ["apple", "banana", "cherry"]
+my_function4(fruits_list)
+
+
+
+def my_function5(person):
+    return f"{person['name']} is {person['age']} years old."
+person_info = {"name": "Alice", "age": 30}
+result = my_function5(person_info)
+print(result)  # "Alice is 30 years old."
+
+
+
+
+##return values##
+def my_function6(x,y):
+    return y * x
+
+
+result = my_function6(3,2)
+
+print(result)  # 6
+
+
+##returning different data types
+
+def my_function7():
+    return [1, 2, 3, 4, 5]
+
+fruits=my_function7()
+print(fruits)  # [1, 2, 3, 4,5]
+print(fruits[0])  # 1
+print(fruits[1])  # 2
+print(fruits[2])  # 3
+
+
+##positional-only arguments
+
+def ornek(a, b, /, c, d, *, e, f):
+    """
+    a, b: positional-only
+    c, d: positional veya keyword
+    e, f: keyword-only
+    """
+    print(a, b, c, d, e, f)
+
+# Doğru kullanım
+ornek(1, 2, 3, d=4, e=5, f=6)
+ornek(1, 2, c=3, d=4, e=5, f=6)
+
+
+def uzaklik(x1, y1, x2, y2, /):
+    """İki nokta arası uzaklık - parametreler sadece sırayla"""
+    return ((x2 - x1)**2 + (y2 - y1)**2) ** 0.5
+
+# Doğal kullanım:
+uzaklik(0, 0, 3, 4)  # 5.0
+# x1=0, y1=0 gibi yazmaya gerek yok, sıra belli
+
+
+def sunucu_ayarla(*, host, port, ssl=True, timeout=60):
+    """Sunucu ayarları - tüm parametreler keyword ile verilmeli"""
+    print(f"{host}:{port} (SSL: {ssl}, Timeout: {timeout})")
+
+# Açık ve okunabilir:
+sunucu_ayarla(host="example.com", port=8080, ssl=False)
+# sunucu_ayarla("example.com", 8080)  # HATA! Karışıklık olurdu
+
+
+
+def veri_isle(dosya_yolu, /, encoding="utf-8", *, kaydet=False, loglama=True):
+    """
+    dosya_yolu: positional-only (zorunlu ve sırayla)
+    encoding: normal (optional, positional/keyword)
+    kaydet, loglama: keyword-only (seçenekler açık olmalı)
+    """
+    print(f"{dosya_yolu} - {encoding} - kaydet:{kaydet} - log:{loglama}")
+
+# Kullanım:
+veri_isle("rapor.txt", "ascii", kaydet=True, loglama=False)
+veri_isle("rapor.txt", kaydet=True)  # encoding varsayılan
+
+
+
+
+###keyword-only arguments###
+
+def my_function8(*, name):
+    print("Hello, " + name)
+
+my_function8(name="Alice")
+
+
+
+
+## *args and **kwargs##
+
+
+def topla(*args):
+    """Sınırsız sayıda sayıyı toplar"""
+    print(f"args türü: {type(args)}")  # <class 'tuple'>
+    print(f"args değeri: {args}")      # Gelen sayıların tuple'ı
+    return sum(args)
+
+print(topla(1, 2, 3))          # 6
+print(topla(1, 2, 3, 4, 5))    # 15
+print(topla())                  # 0 (boş tuple)
+
+
+
+
+def kullanici_bilgileri(**kwargs):
+    """Sınırsız sayıda keyword argüman alır"""
+    print(f"kwargs türü: {type(kwargs)}")  # <class 'dict'>
+    print(f"kwargs değeri: {kwargs}")      # Gelen keyword'lerin dictionary'si
+    
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+kullanici_bilgileri(ad="Ali", yas=25, sehir="Ankara")
+# Çıktı:
+# ad: Ali
+# yas: 25
+# sehir: Ankara
+kullanici_bilgileri(ad="Ayşe", meslek="Mühendis")
+kullanici_bilgileri(am="Fatma",im='sss')
+
+
+##using **kwargs with regular arguments
+
+def my_function9(username, **details):
+  print("Username:", username)
+  print("Additional details:")
+  for key, value in details.items():
+    print(" ", key + ":", value)
+
+my_function9("emil123", age = 25, city = "Oslo", hobby = "coding")
+my_function9("veli456", country = "Turkey", profession = "engineer")
+
+
+
+##combining *args and **kwargs
+
+# the order must be:
+#1-regular positional arguments
+#2-*args
+#3-**kwargs
+
+
+
+def my_function10(title, *args, **kwargs):
+  print("Title:", title)
+  print("Positional arguments:", args)
+  print("Keyword arguments:", kwargs)
+
+my_function10("User Info", "Emil", "Tobias", age = 25, city = "Oslo")
+my_function10("Product Details", "Laptop", "Smartphone", price = 1500, stock = 30)
+my_function10("Event", "Conference", date="2024-10-15", location="New York")
+my_function10("Test")
+
+
+##unpacking lists with *
+
+def my_function11(a,b,c):
+    return a+b+c
+
+numbers=[1,2,3]
+result=my_function11(*numbers)  #unpacking list
+print(result)  #6
+
+
+#unpacking dictionaries with **
+
+def my_function12(name, age, city):
+    return f"{name} is {age} years old and lives in {city}."
+
+person_info = {"name": "Alice", "age": 30, "city": "New York"}
+result = my_function12(**person_info)  #unpacking dictionary
+print(result)  #Alice is 30 years old and lives in New York.
+
+
