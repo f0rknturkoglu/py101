@@ -81,15 +81,19 @@ match user:
         print("Bilinmeyen kullanıcı tipi")
 
 # 5. Sınıf Pattern Matching
+
+
 class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
+
 class Circle:
     def __init__(self, center, radius):
         self.center = center
         self.radius = radius
+
 
 shape = Circle(Point(0, 0), 5)
 
@@ -117,6 +121,8 @@ match data:
         print(f"İlk: {first}, Orta: {middle}, Son: {last}")
 
 # 7. HTTP Status Code Örneği
+
+
 def handle_response(status_code, data):
     match status_code:
         case 200:
@@ -131,6 +137,7 @@ def handle_response(status_code, data):
             return f"Server hatası: {code}"
         case _:
             return "Bilinmeyen durum kodu"
+
 
 print(handle_response(200, "Veri alındı"))
 print(handle_response(503, None))

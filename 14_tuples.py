@@ -1,3 +1,5 @@
+from collections import namedtuple
+import sys
 mytuple = ('apple', 'banana', 'cherry')
 # tuples are used to store multiple items in a single variable
 print(mytuple)
@@ -155,14 +157,12 @@ print(x)  # 3
 # 3. Dictionary key olarak kullanılabilir (listeler kullanılamaz)
 # 4. Daha az bellek kullanır
 
-import sys
 my_list = [1, 2, 3, 4, 5]
 my_tuple = (1, 2, 3, 4, 5)
 print(f"Liste boyutu: {sys.getsizeof(my_list)} bytes")
 print(f"Tuple boyutu: {sys.getsizeof(my_tuple)} bytes")
 
 # Named Tuples - daha okunabilir tuple'lar
-from collections import namedtuple
 
 Person = namedtuple('Person', ['name', 'age', 'city'])
 person1 = Person('Ali', 25, 'İstanbul')
@@ -171,8 +171,11 @@ print(person1.age)   # 25
 print(person1.city)  # İstanbul
 
 # Tuple unpacking - gelişmiş
+
+
 def get_min_max(numbers):
     return min(numbers), max(numbers)
+
 
 minimum, maximum = get_min_max([1, 5, 3, 9, 2])
 print(f"Min: {minimum}, Max: {maximum}")
@@ -195,8 +198,11 @@ locations[(39.9334, 32.8597)] = "Ankara"
 print("Koordinat sözlüğü:", locations)
 
 # Çoklu return değerleri
+
+
 def calculate_stats(numbers):
     return sum(numbers), len(numbers), sum(numbers)/len(numbers)
+
 
 total, count, average = calculate_stats([1, 2, 3, 4, 5])
 print(f"Toplam: {total}, Adet: {count}, Ortalama: {average}")

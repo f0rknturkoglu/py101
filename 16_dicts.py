@@ -1,3 +1,5 @@
+from collections import Counter
+from collections import defaultdict
 thistict = {
     "name": "Alice",
     "age": 30,
@@ -170,7 +172,6 @@ student.setdefault('grade', 'A')  # grade yoksa ekler
 print("Student:", student)
 
 # defaultdict - otomatik varsayılan değer
-from collections import defaultdict
 
 word_count = defaultdict(int)  # Varsayılan değer: 0
 text = "hello world hello python world"
@@ -179,7 +180,6 @@ for word in text.split():
 print("Kelime sayısı:", dict(word_count))
 
 # Counter - eleman sayma için özel sözlük
-from collections import Counter
 
 fruits = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']
 fruit_counts = Counter(fruits)
@@ -209,7 +209,8 @@ print("Birleştirilmiş:", merged)
 
 # Dictionary sıralama
 scores = {'Ali': 85, 'Veli': 92, 'Ayşe': 78, 'Fatma': 95}
-sorted_by_value = dict(sorted(scores.items(), key=lambda x: x[1], reverse=True))
+sorted_by_value = dict(
+    sorted(scores.items(), key=lambda x: x[1], reverse=True))
 print("Puana göre sıralı:", sorted_by_value)
 
 # Dictionary filtreleme

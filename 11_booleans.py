@@ -48,13 +48,16 @@ print(bool([]))        # False
 print(bool({}))        # False
 print(bool(()))        # False
 print(bool(1))         # True
-print(bool([1,2]))     # True
-print(bool({"a":1}))   # True
+print(bool([1, 2]))     # True
+print(bool({"a": 1}))   # True
 
 # Boolean Fonksiyonları
+
+
 def is_even(number):
     """Sayının çift olup olmadığını kontrol eder"""
     return number % 2 == 0
+
 
 print(is_even(4))   # True
 print(is_even(7))   # False

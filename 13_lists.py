@@ -1,3 +1,4 @@
+import copy
 thislist = ["apple", "banana", "cherry"]
 print(thislist)
 '''
@@ -204,7 +205,6 @@ print("İkişer atlayarak:", fruits[::2])
 print("Son 3 eleman:", fruits[-3:])
 
 # Liste kopyalama - Shallow vs Deep copy
-import copy
 original = [[1, 2], [3, 4]]
 shallow = original.copy()  # Sığ kopya
 deep = copy.deepcopy(original)  # Derin kopya

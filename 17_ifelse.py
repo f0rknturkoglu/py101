@@ -248,9 +248,12 @@ if name:  # name boş string değilse True
     print(f"Merhaba {name}")
 
 # Short-circuit evaluation
+
+
 def check():
     print("Fonksiyon çağrıldı")
     return True
+
 
 # and operatörü: sol taraf False ise sağ taraf kontrol edilmez
 if False and check():  # check() çağrılmaz

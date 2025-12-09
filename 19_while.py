@@ -1,3 +1,4 @@
+import random
 i = 1
 while i < 6:
     print(i)
@@ -57,7 +58,7 @@ max_attempts = 3
 while attempts < max_attempts:
     # password = input("Lütfen şifrenizi girin: ")
     password = "12345"  # Test için
-    
+
     if password == "12345":
         print("Giriş başarılı!")
         break
@@ -107,7 +108,6 @@ while i <= 3:
     i += 1
 
 # While ile sayı tahmin oyunu
-import random
 secret = random.randint(1, 10)
 guess_count = 0
 max_guesses = 5
@@ -117,7 +117,7 @@ while guess_count < max_guesses:
     # guess = int(input("Tahmininiz: "))
     guess = random.randint(1, 10)  # Test için
     guess_count += 1
-    
+
     if guess == secret:
         print(f"Tebrikler! {guess_count} denemede buldunuz!")
         break

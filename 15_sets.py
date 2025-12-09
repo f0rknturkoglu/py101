@@ -1,3 +1,4 @@
+import time
 myset = {'apple', 'banana', 'cherry'}
 # sets are used to store multiple items in a single variable
 
@@ -273,7 +274,6 @@ print("Tekrarsız liste:", unique)
 
 # Set ile performans avantajı
 # Liste yerine set kullanmak üyelik kontrolünde çok daha hızlıdır
-import time
 
 large_list = list(range(100000))
 large_set = set(range(100000))
